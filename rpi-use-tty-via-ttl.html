@@ -3,11 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>墨的碎碎念</title>
+<title>树莓派使用 ttl 串口转 usb 连接电脑登录终端</title>
 <!-- 2017-05-16 Tue 13:40 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="raspberry pi, no screen, usb to ttl, no screen" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -138,13 +139,53 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">墨的碎碎念</h1>
-<ul class="org-ul">
-<li><a href="rpi-use-tty-via-ttl.html">2017-05-01 树莓派使用 ttl 串口转 usb 连接电脑登录终端</a>
+<h1 class="title">树莓派使用 ttl 串口转 usb 连接电脑登录终端</h1>
+<p>
+之前买了一块树莓派 3 的板子,准备搞个服务器玩玩.
+</p>
+
+<p>
+不过在按照网上找来的各种办法和 wiki 装上了系统,并把板子用网线与路由器连接起来之后,发现 ssh 连接被拒绝,怎么弄都没用.
+</p>
+
+<p>
+试了很多遍修改树莓派里面的 <code>/etc/ssh/sshd_config</code> 文件都没用之后,在网上发现了树莓派使用 usb 转串口可以连接电脑的方法.
+</p>
+
+<p>
+步骤差不多如下:
+</p>
+
+<ol class="org-ol">
+<li>之后就是查树莓派三的引脚手册,找出 TX 和 RX,用杜邦线把 usb-to-ttl 接到树莓派上.
 </li>
-</ul>
+
+<li>把 usb 接到电脑上,如果用的是 linux 系统<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>,接上之后系统里会多出一个设备 <code>/dev/ttyUSB0</code>.
+</li>
+
+<li>检查是否安装了 <a href="https://www.gnu.org/software/screen/">GNU Screen</a>, 在终端下输入 <code>screen -v</code> 会出现该软件的版本信息,如果出现的是 <code>command not found</code>, 则需要安装<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+</li>
+
+<li>使用 <code>screen</code> 命令连接树莓派终端, 在终端下输入 <code>screen /dev/ttyUSB0 115200</code>,第二个参数是 usb-to-ttl 设备名,第三个参数是波特率,如果树莓派没有经过特殊配置,默认为 115200.
+</li>
+</ol>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+其他系统没测试过,应该是要装驱动的,不过我用的 Arch,udev 自带驱动,好像会自动装载.
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+一般的 linux 发行版的官方仓库都有,如果没有,通过包管理器或者下载二进制文件安装.
+</p></div>
+
+
 </div>
+</div></div>
 <div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-05-01 Mon&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
 <p class="date">Created: 2017-05-16 Tue 13:40</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
