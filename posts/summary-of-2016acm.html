@@ -1,0 +1,312 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>2016 年山东省 ACM 省赛总结</title>
+<!-- 2017-05-27 Sat 23:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Matrikslee" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">2016 年山东省 ACM 省赛总结</h1>
+<p>
+忙碌的日子终于告一段落了，空闲下来的时候写点东西。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">写在前面</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+6 月 5 号，山东省的 ACM 省赛告一段落，我在队友们的带飞下于省赛中水了个银牌，因为没有机会拿金有点小小的失落，不过事后想想还是能接受的，毕竟是自己不够努力。
+现在就随便写点总结性的东西了。今年的省赛题目总体来说简单题目相对较多，我们队一共做出来七道题目，除了最后一道题目是在比赛结束前 10 分钟做出来的，前几道题目都不是特别难。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">题目总结</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+我们做出来的七道题目的描述简单说一下（题目不分顺序，想起什么写什么）：
+</p>
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">水题 1：</h3>
+<div class="outline-text-3" id="text-2-1">
+<ul class="org-ul">
+<li>大意就是某人一共需要背 N 个单词，一共有 M 天的时间让他背单词，问：他最多每天需要背多少个单词。简单的一个除法，不能整除的时候答案加一。
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">水题 2：</h3>
+<div class="outline-text-3" id="text-2-2">
+<ul class="org-ul">
+<li>输入一行字符串，把其中的单词镜像翻转后输出，单词的前后顺序不改变。这道题是我用 <code>getchar()</code> 函数水过的。
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">水题 3：</h3>
+<div class="outline-text-3" id="text-2-3">
+<ul class="org-ul">
+<li>给一个地图，地图上的某些点是"#"，有些点是"."，要求找出地图上只与一个"#"相邻的"."的个数。这道是队友 A 水过的。
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4">数学题：</h3>
+<div class="outline-text-3" id="text-2-4">
+<ul class="org-ul">
+<li>一道关于斐波那契数列的题目，给一个 N，把 N 分解输出为 <code>N=若干个斐波那契数的和</code> 的形式（例如：10=8+2），如果不能分解输出-1;
+</li>
+<li>要求：这若干个斐波那契数里面不能有相邻的，因为相邻的两个斐波那契数可以表示为一个更大的斐波那契数
+</li>
+<li>这道题目我完全没有管，两个队友在讨论了一下之后，然后发现不难，就写了（我也不知道代码谁写的），然后就过了。
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5">模拟题：</h3>
+<div class="outline-text-3" id="text-2-5">
+<ul class="org-ul">
+<li>一道模拟 <b>炉石传说</b> 游戏的简单模拟题（我们队因为队友 B 玩过这个游戏，所以题目都没读完整，直接看了看规则然后就写完了;然后就过了。
+</li>
+<li>规则有点复杂就不一一叙述了（其实是因为我根本就不知道，逃。。。）
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-6" class="outline-3">
+<h3 id="sec-2-6">图论题 ( 最短路 )：</h3>
+<div class="outline-text-3" id="text-2-6">
+<ul class="org-ul">
+<li>背景设定是这样的：你的电脑是 0 号机，有 N 个代理服务器 (proxy), 他们被标为 1-N 号机 (label),要访问的网站是 N+1 号机。
+</li>
+<li>第 i 号电脑可以与第 j 号电脑连接，连接会有一个时延 (time lag),用 w 表示;这样这 N+2 台电脑可以够成一个网络。
+</li>
+<li>现在的要求是 在代理网络总能够选择一个延时最短的线路访问到第 N+2 号网站 ( 如果可以访问的到的话 ) 的条件下,你如何选择你的 0 号机要连接的代理服务器 (proxy) 使得时延最小 ( 如果有多个 proxy，连接它们都能达到最小的时延，连接标号 (label) 最小的那个 )。
+</li>
+<li>这道题目在读完题目之后我和队友 A 一致认为是一个最短路问题，于是我掏出了 dijkstra 模板并将其输入到了电脑上，调试了一下然后交了，然后忘记考虑如果时延相同要选择标号最小的那个代理服务器的条件了。
+</li>
+<li>然后我把选择标号最小的代码块加上去了，然后提交，发现还是不对，然后再次读题，然后发现不应该直接判断起点 0 的时延，而应该把所有 0 号机可以连接的 proxy 都考虑一遍，也就是说这里需要在 dijkstra 模板外面手写一个循环来判断。
+</li>
+<li>然后这样修改了几次代码之后，不知道为什么我把选择标号最小的代码快给写错了（后来仔细反省发现一开始是写对了的，是因为某次调试删掉之后，后来又重新添加上去了之后，写错了）
+</li>
+<li>错误的地方为：我把一个整型数组的数组名 (dis) 错写成了一个布尔数组名 (vis)，这个错误在编译器里面是不会有任何 warning 和 error 的。于是因此多花了一个多小时的时间在这个上面。
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-7" class="outline-3">
+<h3 id="sec-2-7">博弈论：</h3>
+<div class="outline-text-3" id="text-2-7">
+<ul class="org-ul">
+<li>一道关于博弈论的题目，也是我们最后在比赛结束前 10 分钟的时候做出来的题目。说实话能做出这道题目来真的是很幸运的。
+</li>
+<li>题目描述为：有三堆石子，有两个玩选石子游戏的人，每人每次只能从一个石子堆里面拿走至少一颗石子，谁最后把所有石堆拿空谁赢。
+</li>
+<li>现在题目问：有多少种方案 <b>把这 N 个石子分成三堆，在两人都按最优方案取走石子的条件下，保证后手获胜。</b> 输入 N，输出方案数量。
+</li>
+<li>这到题目的做题过程如下：
+<ul class="org-ul">
+<li>首先，两个队友在看完题目后一直在想这个题目的解决办法，想了很久没想出来。
+</li>
+<li>后来队友 A 偶然间说了句“我记得博弈论跟异或有关”，于是他们开始找所有后手必胜态的三个数字之间的异或关系，发现三个数字如果异或到一起结果为 0 的时候，后手必胜。
+</li>
+<li>然后我就提出了一个意见，如果这三个数字异或到一起结果为 0,而且这三个数字加在一起和为 N 的话，那么对于 N 的二进制位是不是有一些特殊要求。
+</li>
+<li>然后队友 B 就打了一个表，打印了 N 和 N 的二进制位以及 N 对应的方案数目。然后就发现了规律，然后就在提交两次后过了 ( 第一次忘记考虑方案数为 0 的情况了）。
+</li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-sec-2-8" class="outline-3">
+<h3 id="sec-2-8">字符串处理：</h3>
+<div class="outline-text-3" id="text-2-8">
+<p>
+上面是这次比赛过了的题目情况，还有一道题目我不得不提一下，那就是本次比赛里面的 H 题
+</p>
+<ul class="org-ul">
+<li>题目意思很简单：
+<ol class="org-ol">
+<li>首先会给一个定义命令，定义若干个字符数组，并分配一些空间。
+</li>
+<li>然后碰到输入 (gets) 命令输入字符串，碰到输出 (cout) 命令输出字符串。
+</li>
+<li>碰到返回 (return) 命令结束本次数据。
+</li>
+</ol>
+</li>
+<li>然后有一些条件：
+<ol class="org-ol">
+<li>分配的字符输出的空间是连在一起的，输入会造成数组间的内存溢出;例如 <code>char a[5], b[5];</code> 这样定义的两个数组各自的长度为 5,总长度是 10,如果给 a 输入一个长度为 6 的数组，字符会溢出到 b 的空间里面去，会在字符串的最后添加一个'\0'作为结束标志。
+</li>
+<li>但是输入造成的溢出不会影响到总长度之外的内存空间。例如还是上面的例子，现在给 a 输入一个长度为 11 的字符串，它会保留前 10 个字符，并不会在最后加'\0'作为结束标志，因为已经没有空间了。
+</li>
+<li>输出的时候从定义时分配的内存开始输出，碰到'\0'或者超出内存空间总长度则结束。
+</li>
+</ol>
+</li>
+<li>这道题目的思路真的不难，真的不难，不难。但是就是做不出来，做不出来，做不出来。我还有什么话可说呢。
+</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">反省</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+总的来说本次比赛我的状态还算正常，没有太过紧张也没有超常发挥，就是有点小失误——写错变量名 ( 一点不小好吗？)，这个真的必须好好反省。嗯，好好反省，好好反省，好好反省。
+题目刷的还是不够（其实没刷吧。。），代码还是写的有点少。
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-06-06 Mon&gt;</span></span></p>
+<p class="author">Author: Matrikslee</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

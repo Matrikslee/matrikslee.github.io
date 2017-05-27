@@ -1,0 +1,579 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>linux 命令行</title>
+<!-- 2017-05-27 Sat 23:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="linux" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">linux 命令行</h1>
+<p>
+很早之前就有这个想法了,觉得很有必要把我学过的 linux 命令行技巧都记录一下.<br  />
+</p>
+
+<p>
+说明:<br  />
+</p>
+<ol class="org-ol">
+<li>想到什么写什么,所以可能会非常乱.<br  />
+</li>
+<li>所有命令名上的链接均引自维基百科.<br  />
+</li>
+<li>有中文条目则引用中文条目,没有则为英文,英文条目都没有的就不引用了.<br  />
+</li>
+</ol>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Details</h2>
+<div class="outline-text-2" id="text-1">
+</div><div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">一些常用的系统命令</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+命令行嘛,最重要的就是命令咯~<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">命令名称</th>
+<th scope="col" class="left">简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Cd_(%E5%91%BD%E4%BB%A4)">cd</a></td>
+<td class="left">切换工作目录</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Ls">ls</a></td>
+<td class="left">列出当前目录下的文件</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Rm_(Unix)">rm</a></td>
+<td class="left">删除文件</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Mv_(Unix)">mv</a></td>
+<td class="left">移动文件 <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup></td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/%E6%89%8B%E5%86%8C%E9%A1%B5">man</a></td>
+<td class="left">查看手册页 ( 命令行下可用命令的帮助文档 )</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Cat_(Unix)">cat</a></td>
+<td class="left">concatenate 的缩写,将文件内容进行拼接 <sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup></td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/More_(%E5%91%BD%E4%BB%A4)">more</a></td>
+<td class="left">原始的命令行分页工具</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://en.wikipedia.org/wiki/Less_(Unix)">less</a></td>
+<td class="left">比 more 更强大的分页工具</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://en.wikipedia.org/wiki/Head_(Unix)">head</a></td>
+<td class="left">以纯文本的形式输出文件的开头部分</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://en.wikipedia.org/wiki/Tail_(Unix)">tail</a></td>
+<td class="left">以纯文本的形式输出文件的结尾半部分</td>
+</tr>
+
+<tr>
+<td class="left">date</td>
+<td class="left">显示日期</td>
+</tr>
+
+<tr>
+<td class="left">time</td>
+<td class="left">显示系统资源的使用情况 <sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup></td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Exit_(%E5%91%BD%E4%BB%A4)">exit</a></td>
+<td class="left">退出登录或者关闭终端</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Clear_(Unix)">clear</a></td>
+<td class="left">清空屏幕</td>
+</tr>
+
+<tr>
+<td class="left">lsblk</td>
+<td class="left">显示块设备</td>
+</tr>
+
+<tr>
+<td class="left">lspci</td>
+<td class="left">显示 pci 设备</td>
+</tr>
+
+<tr>
+<td class="left">lsusb</td>
+<td class="left">显示 usb 设备</td>
+</tr>
+
+<tr>
+<td class="left">history</td>
+<td class="left">显示历史命令列表</td>
+</tr>
+
+<tr>
+<td class="left">!!</td>
+<td class="left">执行上一条命令</td>
+</tr>
+
+<tr>
+<td class="left">!N</td>
+<td class="left">执行命令历史列表中的第 N 条命令</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Whoami">whoami</a></td>
+<td class="left">查看当前用户名</td>
+</tr>
+
+<tr>
+<td class="left">arch</td>
+<td class="left">显示当前系统架构,等同于使用 <i>uname -m</i> 命令</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Uname">uname</a></td>
+<td class="left">打印当前系统信息</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Chmod">chmod</a></td>
+<td class="left">设置文件权限 ( 读/写/执行 )</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Chown">chown</a></td>
+<td class="left">设置文件所有者和文件关联组</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Chroot">chroot</a></td>
+<td class="left">更改外显根目录</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Echo_(%E5%91%BD%E4%BB%A4)">echo</a></td>
+<td class="left">输出字符串到终端</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Alias_(%E5%91%BD%E4%BB%A4)">alias</a></td>
+<td class="left">定义或者显示别名</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Wc_(Unix)">wc</a></td>
+<td class="left">Word Count 的首字母缩写,顾名思义,该命令用于统计单词数</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Bg_(Unix)">bg</a></td>
+<td class="left">显示当前终端已挂起的后台程序</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Fg_(Unix)">fg</a></td>
+<td class="left">将已经挂起的后台命令转移自前台继续执行</td>
+</tr>
+
+<tr>
+<td class="left">tty</td>
+<td class="left">显示当前终端的名字</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Ps_(Unix)">ps</a></td>
+<td class="left">Process Status 的缩写,显示当前运行的进程</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Env">env</a></td>
+<td class="left">显示所有环境变量</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+<div id="outline-container-sec-1-2" class="outline-3">
+<h3 id="sec-1-2">来自于软件包的命令</h3>
+<div class="outline-text-3" id="text-1-2">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">命令名称</th>
+<th scope="col" class="left">简要说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Git">git</a></td>
+<td class="left">由 linus 创作的分布式版本控制软件</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/%E9%AB%98%E7%BA%A7%E5%8C%85%E8%A3%85%E5%B7%A5%E5%85%B7">apt</a></td>
+<td class="left">Debian 及其派生发行版的软件包管理程序</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Vim">vim</a></td>
+<td class="left">一种适用于命令行下的文本编辑器</td>
+</tr>
+
+<tr>
+<td class="left"><a href="https://zh.wikipedia.org/wiki/Node%E5%8C%85%E7%AE%A1%E7%90%86%E5%99%A8">npm</a></td>
+<td class="left">nodejs 所用的软件包管理程序</td>
+</tr>
+
+<tr>
+<td class="left">hexo</td>
+<td class="left">一个用 nodejs 实现的静态博客渲染程序</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="outline-container-sec-1-3" class="outline-3">
+<h3 id="sec-1-3">常用快捷键</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+命令行下快捷键也是非常重要的.<br  />
+PS:这里介绍的是默认的 <code>emacs 风格</code> 捷键.<br  />
+</p>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="left" />
+
+<col  class="left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="left">快捷键组合</th>
+<th scope="col" class="left">作用描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="left">Ctrl+a</td>
+<td class="left">移动光标到行首</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+e</td>
+<td class="left">移动光标到行末</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+f</td>
+<td class="left">光标向前移动一个字符,相当于方向键的右</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+b</td>
+<td class="left">光标向后移动一个字符,相当于方向键的左</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+p</td>
+<td class="left">显示上一条命令,相当于方向键的上</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+n</td>
+<td class="left">显示下一条命令,相当于方向键的下</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+k</td>
+<td class="left">剪切光标处到行末的所有字符</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+u</td>
+<td class="left">剪切当前行所有字符</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+r</td>
+<td class="left">向前搜索使用过的与输入字符匹配的命令</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+l</td>
+<td class="left">清空屏幕<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup></td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+h</td>
+<td class="left">删除光标之前的一个字符</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+d</td>
+<td class="left">删除光标所在处的字符</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+y</td>
+<td class="left">将剪切板中的字符粘贴到命令行</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+w</td>
+<td class="left">剪切光标所在处之前的一个词<sup><a id="fnr.5" name="fnr.5" class="footref" href="#fn.5">5</a></sup></td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+c</td>
+<td class="left">发送 INT 信号（SIGINT）；默认情况下，这会导致进程终止。</td>
+</tr>
+
+<tr>
+<td class="left">Ctrl+z</td>
+<td class="left">发送 TSTP 信号（SIGTSTP）；默认情况下，这会导致进程挂起。</td>
+</tr>
+</tbody>
+</table>
+
+<p>
+当然咯,既然有 <code>emacs 风格</code>, 肯定也会有 <code>vim 风格</code> 的,不过这里就不做介绍了,切换方法和具体的操作请自行谷歌.<br  />
+一直认为命令行下面用 <code>vim 风格</code> 的快捷键很鬼畜.<br  />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">Reference</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+参考资料列表:<br  />
+</p>
+
+<ul class="org-ul">
+<li>电子书 <a href="https://billie66.github.io/TLCL/book/index.html">快乐的 Linux 命令行</a><br  />
+</li>
+<li>参考 wiki <a href="https://zh.wikipedia.org/wiki/Unix%E5%AE%9E%E7%94%A8%E7%A8%8B%E5%BA%8F%E5%88%97%E8%A1%A8">Unix 实用程序列表</a><br  />
+</li>
+<li>参考 wiki <a href="https://zh.wikipedia.org/wiki/GNU%E6%A0%B8%E5%BF%83%E5%B7%A5%E5%85%B7%E7%BB%84">GNU 核心工具组</a><br  />
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">Logs</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2016-07-03 Sun&gt;</span></span> 第一次发布.<br  />
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2016-07-08 Fri&gt;</span></span> 第二次更新.<br  />
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2016-09-15 Thu&gt;</span></span> 第三次更新.<br  />
+<span class="timestamp-wrapper"><span class="timestamp">&lt;2016-10-30 Sun&gt;</span></span> 第四次更新.<br  />
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+也可以用于文件重命名<br  />
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+对一个文件使用的时候就是简单的显示此文件内容<br  />
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+不是用于显示当前时间的<br  />
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+它和 clear 命令的区别在于 clear 命令会清空缓存区,而它不会.<br  />
+</p></div>
+
+<div class="footdef"><sup><a id="fn.5" name="fn.5" class="footnum" href="#fnr.5">5</a></sup> <p class="footpara">
+以空格,标点等为分隔符<br  />
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-10-30 Sun&gt;</span></span></p>
+<p class="author">Author: Matrikslee</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Emacs 中英文混排时等宽字体的对齐问题</title>
+<!-- 2017-05-27 Sat 23:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="emacs" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Emacs 中英文混排时等宽字体的对齐问题</h1>
+<p>
+解决 spacemacs 里面由于中英文字体不等宽导致的 org-mode 下表格无法对齐的问题.
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">起因</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+其实这个原因只要是用过 org-mode 的人应该都碰到过,于是我也碰到了.
+</p>
+
+<p>
+主要是由于默认等宽字体的中英文字体的宽度不等 ( 但是中文字体和中文字体宽度相等,英文字体和英文字体的宽度相等 ) 导致在 orgmode 下进行中英文混排制作表格的时候,表格无法对齐,这不管是对于强迫症患者还是非强迫症患者都是一个非常严重的问题.
+</p>
+
+<p>
+所以我在磨蹭了两天之后 ( 其实是因为要坐长途火车回学校 ),开始着手解决这个问题,从谷歌开始.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">折腾</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+一开始找到一个博客的博主里说用他的脚本就可以解决这个问题,然而我把脚本配置拷贝下来放到我的自定义 layer 里面,并没有解决这个问题,该不等宽的还是不等宽.
+</p>
+
+<p>
+然后继续在谷歌上找,找到了一个神奇的 package,名字叫做 <a href="https://github.com/tumashu/chinese-fonts-setup">chinese-fonts-setup</a>. 这是个非常神奇的 package,安装上它了之后我的问题就被自动解决了.
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">继续折腾</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+但是作为一个充满好奇心的程序员,是绝对不能知其然而不知其所以然的,所以我开始研究这个包 ( 好吧,其实也没有研究出个所以然 ),对它的思路进行了大概的了解.
+</p>
+
+<p>
+它的思路大概是这样的:既然中文本身和英文字体本身是等宽的,只有当两者放到一起的时候才会出现不等宽的情况,那么是不是可以主动设置两种字体的字号不一样来达到使他们实际宽度相等的目的呢.
+</p>
+
+<p>
+答案是可以的.这个包的解决方案就是这样的,是一个非常完美的解决办法,唯一的缺点就是在某一个字体的大小被改变了之后,另一个字体的大小需要手动去调节 ( 因为它们之间宽度没有任何可以用数学公式来描述的关系 )
+</p>
+
+<p>
+所以缺点还是有的,不过不是很影响这个方案的使用 ( 感觉用这个的人还是蛮多的 ).
+</p>
+
+<p>
+还有个缺点就是这个方法依赖于不同的字体,而有写字体不支持 Unicode 字符集,所以在某些时候会遇到一些麻烦的乱码问题,不过这样的几率是很小的,我直接忽略了,等碰到再说.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">使用方法</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+使用方法其实很简单,把包往自己的自定义层里面一放,写一个 init 函数就解决问题了,代码大致如下:
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-lisp"><span style="color: #b22222;">;; </span><span style="color: #b22222;">&#24448;&#23433;&#35013;&#21253;&#30340;&#22320;&#26041;&#25918;&#19978;&#21253;&#30340;&#21517;&#23383;&#23601;&#22909;&#20102;</span>
+<span style="color: #707183;">(</span>defconst lyeec-packages
+  '<span style="color: #7388d6;">(</span> <span style="color: #b22222;">;;</span><span style="color: #b22222;">'</span>
+    org-page
+    chinese-fonts-setup
+   <span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+<span style="color: #b22222;">;; </span><span style="color: #b22222;">&#28982;&#21518;&#20889;&#19968;&#20010; init-&lt;&#21253;&#21517;&gt;&#30340;&#21021;&#22987;&#21270;&#20989;&#25968;&#23601; ok &#20102;</span>
+<span style="color: #707183;">(</span><span style="color: #a020f0;">defun</span> <span style="color: #0000ff;">lyeec/init-chinese-fonts-setup</span><span style="color: #7388d6;">()</span>
+  <span style="color: #7388d6;">(</span>use-package chinese-fonts-setup<span style="color: #7388d6;">)</span><span style="color: #707183;">)</span>
+</pre>
+</div>
+
+<p>
+这个包的使用比之前用到的 org-page 还要简单.org-page 还要加一些配置,我是直接在 <code>use-package</code> 的时候加,当然也可以在 layer 的 <code>config.el</code> 文件里加.
+</p>
+
+<p>
+添加玩代码并保存好之后用 evil 模式下的 <code>SPC f e R</code> 进行更新 或者 传统 emacs 模式下的 <code>M-m f e R</code> 进行更新即可.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">自己设置字号大小</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+虽然这个包在开始使用的时候就帮用户选择好了它认为合适的字号,但是总有那么一些程序员对默认配置不满意的 ( 例如我 ),想要自己修改字体大小.
+</p>
+
+<p>
+chinese-fonts-setup 这个包也做了很人性化的配置设置. 按下 <code>M-x</code> 然后输入命令 <code>cfs-edit-profile</code>,就可以打开这个包的配置文件了,配置文件里面有详细的注释告诉用户怎么操作.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">不折腾的办法</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+关于之前说到的那个缺点,我在问过大神之后得到的回答是碰到问题的几率是非常小的,所以我忽略不管,但是大神也告诉了我一种在不知道如何解决乱码问题的时候,同意用 ubuntu mono 字体,这个字体的英文和中文是等宽的.
+</p>
+
+<p>
+这个办法既省时又省力气,多么好啊,我差点就行动了,然而我还是继续用着 chinese-fonts-setup.因为听别人说,ubuntu mono 字体并不好看 ( 对,我就是这样一个追求外相的人,一点也不朴实沉毅 QAQ).
+</p>
+
+<p>
+说是折腾,其实也没有折腾多久,大概就半个小时 ( 不包括搜谷歌的时间 ) 就搞定了吧,实在是这个包使用起来太简单了.
+</p>
+
+<p>
+我要去的调节字体大小了(逃...
+</p>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-03-06 Sun&gt;</span></span></p>
+<p class="author">Author: Matrikslee</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

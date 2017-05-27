@@ -3,11 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>墨的碎碎念</title>
+<title>ubuntu 下 grub 的重装</title>
 <!-- 2017-05-27 Sat 23:38 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="linux, ubuntu, bootloader" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -138,17 +139,78 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">墨的碎碎念</h1>
-<ul class="org-ul">
-<li><a href="posts/index.html">文章列表</a>
-</li>
-<li><a href="guestbook.html">留言板</a>
-</li>
-<li><a href="links.html">链接</a>
-</li>
-</ul>
+<h1 class="title">ubuntu 下 grub 的重装</h1>
+<p>
+解决由于在 EFI 分区里面的 grub 引导被替换成了 windows bootmgr 导致的无法引导 ubuntu 的问题。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">问题</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+因为某些原因，需要在电脑上安装一个 windows 7. 但是因为硬盘用的 GPT 格式并用 ESP 分区引导，导致原装 windows 安装盘的 windows 安装程序无法使用。
+</p>
+
+<p>
+于是用了某些装机工具。于是 GRUB 引导被该工具删除并写入了 Windows bootmgr 引导。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">解决办法</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+还好我上次装 Ubuntu 用的 USB Live CD 没有被我格式化掉。于是用 usb 引导进 live CD 系统，然后执行如下命令。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo apt-get update
+sudo apt-get install grub
+sudo mount /dev/sda5 /mnt <span style="color: #b22222;">#</span><span style="color: #b22222;">&#25346;&#36733; ubuntu &#31995;&#32479;&#25152;&#22312;&#30340;&#20998;&#21306;&#21040;&#20219;&#24847;&#19968;&#20010;&#25991;&#20214;&#22841;&#65292;&#19968;&#33324;&#29992; /mnt &#23601;&#21487;&#20197;</span>
+sudo mount /dev/sda1 /mnt/boot/efi <span style="color: #b22222;">#</span><span style="color: #b22222;">&#25346;&#22312; ESP &#20998;&#21306;&#21040; /boot/efi &#30446;&#24405;&#65292;&#36825;&#26159;&#25105;&#22833;&#36133;&#22909;&#20037;&#20043;&#21518;&#25165;&#21457;&#29616;&#24517;&#39035;&#35201;&#20570;&#30340;&#12290;</span>
+sudo mount --bind /dev /mnt/dev
+sudo mount --bind /proc /mnt/proc
+sudo mount --bind /sys /mnt/sys
+sudo chroot /mnt
+<span style="color: #b22222;">#</span><span style="color: #b22222;">&#22312;&#26032;&#30340;&#26681;&#30446;&#24405;&#19979;</span>
+grub-install /dev/sda <span style="color: #b22222;">#</span><span style="color: #b22222;">&#19968;&#33324;&#30340;&#35805;&#65292;&#36825;&#26679;&#23601;&#36275;&#22815;&#20102;&#65292;&#22914;&#26524;&#26377;&#29305;&#27530;&#24773;&#20917;&#65292;&#26377;&#26102;&#20505;&#38656;&#35201;&#21333;&#29420;&#21152;&#21035;&#30340;&#21442;&#25968;</span>
+update-grub <span style="color: #b22222;">#</span><span style="color: #b22222;">&#26356;&#26032; grub &#37197;&#32622;&#25991;&#20214;&#21040; ESP &#20998;&#21306;</span>
+</pre>
+</div>
+
+<p>
+执行玩上述命令后重启系统后拔掉 U 盘从硬盘引导，一般就能进入系统了。
+</p>
+
+<p>
+注：上述命令仅限于硬盘使用 ESP 分区引导的情况，如果使用 legacy 设置活动分区的方式引导的话，上述命令是无效的。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">最后的小问题</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+因为某些原因，我一怒之下把原来的 ESP 分区格式化了，导致了分区的 UUID 发生了一些变化，以至于每次进入硬盘系统的时候都会有一个错误提示（虽然不影响系统的使用，不过很烦）。
+</p>
+
+<p>
+所以我必须把这个问题解决了，后来发现解决办法其实很简单，使用 <code>blkid</code> 命令查看 ESP 分区的 UUID， 并将其替换到 <code>/etc/fstab</code> 文件中 <code>/boot/efi</code> 挂载分区的 UUID 处即可。
+</p>
+
+<p>
+PS:因为格式化分区之后 UUID 发生了变化，而系统根据 fstab 里面的 UUID 来挂载分区，导致 EFI 分区挂载失败，所以开机会有错误提示，修正后就消失了。
+</p>
+
+<p>
+补充：还有一点忘记提了，因为格式化 ESP 分区后，只装了 GRUB，所以现在我又没法进入 WINDOWS 系统了，唉。还要想办法把 windows bootmgr 弄回来，烦。
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-05-06 Fri&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
 <p class="date">Created: 2017-05-27 Sat 23:38</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>

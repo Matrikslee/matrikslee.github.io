@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>nginx、flask、uwsgi 部署</title>
+<!-- 2017-05-27 Sat 23:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Matrikslee" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">nginx、flask、uwsgi 部署</h1>
+<p>
+很久之前就学过一点 flask 的皮毛，但是当时由于没有时间去研究其部署方法，后来就放弃了。<br  />
+昨天继续把它捡起来，然后学了学，在自己的电脑上动手，成功的把程序跑起来了。<br  />
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">flaskr</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+既然是部署网站,那就需要一个网站不是吗.<br  />
+</p>
+
+<p>
+我在 flask 官方手册的帮助下,完成了一个小小的可以看的网站.实现了表单的提交.<br  />
+</p>
+
+<p>
+代码存在我的 github 仓库,地址为: <a href="https://github.com/matrikslee/flaskr">https://github.com/matrikslee/flaskr</a><br  />
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">nginx</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">安装</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+如果没有安装 nginx ,需要先进行安装.<br  />
+</p>
+
+<p>
+这里写一下 ubuntu 系统的安装放吧.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo add-apt-repository ppa:nginx/stable
+sudo apt-get update
+sudo apt-get install nginx
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">操作</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+关于 nginx 的启动和停止等操作方法.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo /etc/init.d/nginx start <span style="color: #b22222;">#</span><span style="color: #b22222;">&#21551;&#21160;</span>
+sudo /etc/init.d/nginx stop <span style="color: #b22222;">#</span><span style="color: #b22222;">&#20572;&#27490;</span>
+sudo /etc/init.d/nginx retart <span style="color: #b22222;">#</span><span style="color: #b22222;">&#37325;&#21551;</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">配置</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+写一份配置文件放到 <code>/etc/nginx/conf.d/</code> 目录下：<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-conf"><span style="color: #228b22;">server</span> {
+    listen      80;
+    server_name localhost;
+    charset     utf-8;
+    client_max_body_size 75M;
+
+    location / { try_files $uri @board; }
+    <span style="color: #228b22;">location @board</span> {
+        include uwsgi_params;
+        uwsgi_pass unix:/var/uwsgi/flaskr_uwsgi.sock;
+    }
+}
+</pre>
+</div>
+
+<p>
+我把它保存为 <code>flaskr_nginx.conf</code> ,重启 nginx.<br  />
+</p>
+
+<p>
+好了,nginx 这边可以暂时不管了.<br  />
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">uwsgi</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+这是最麻烦的一个步骤了, 首先我们需要安装 uwsgi, 不过此前需要做好准备工作.<br  />
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">安装依赖</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+我们需要使用 pip、virtualenv 以及 python-dev 包, 因此需要一些操作来安装它.<br  />
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo apt-get install python python-dev python-setuptools
+sudo easy_install pip
+pip install virtualenv
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">配置</h3>
+<div class="outline-text-3" id="text-3-2">
+</div><div id="outline-container-sec-3-2-1" class="outline-4">
+<h4 id="sec-3-2-1">创建目录</h4>
+<div class="outline-text-4" id="text-3-2-1">
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo mkdir -p /var/uwsgi
+sudo mkdir -p /var/log/uwsgi
+sudo mkdir -p /etc/uwsgi/vassals
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-2" class="outline-4">
+<h4 id="sec-3-2-2">配置环境</h4>
+<div class="outline-text-4" id="text-3-2-2">
+<div class="org-src-container">
+
+<pre class="src src-sh"><span style="color: #483d8b;">cd</span> /var/uwsgi
+sudo -i
+virtualenv venv
+<span style="color: #483d8b;">source</span> venv/bin/active <span style="color: #b22222;">#</span><span style="color: #b22222;">&#36827;&#20837;&#34394;&#25311;&#29615;&#22659; #&#36864;&#20986;&#34394;&#25311;&#29615;&#22659;&#29992; deactive &#21629;&#20196;&#21363;&#21487;</span>
+pip install flask uwsgi <span style="color: #b22222;">#</span><span style="color: #b22222;">&#22312;&#34394;&#25311;&#29615;&#22659;&#20013;&#23433;&#35013; uwsgi &#20197;&#21450; flask</span>
+git clone https://github.com/lechain/flaskr.git
+deactive <span style="color: #b22222;">#</span><span style="color: #b22222;">&#27880;&#24847;:&#35843;&#35797;&#31243;&#24207;&#38656;&#35201;&#36827;&#20837;&#21040;&#34394;&#25311;&#29615;&#22659;</span>
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-3" class="outline-4">
+<h4 id="sec-3-2-3">/etc/init/uwsgi.conf</h4>
+<div class="outline-text-4" id="text-3-2-3">
+<div class="org-src-container">
+
+<pre class="src src-conf">description <span style="color: #8b2252;">"uWSGI"</span>
+start on runlevel [2345]
+stop on runlevel [06]
+respawn
+
+<span style="color: #a0522d;">env UWSGI</span>=/var/uwsgi/venv/bin/uwsgi
+<span style="color: #a0522d;">env LOGTO</span>=/var/log/uwsgi/emperor.log
+
+exec $UWSGI --master --emperor /etc/uwsgi/vassals --die-on-term --uid www-data --gid www-data --logto $LOGTO
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-4" class="outline-4">
+<h4 id="sec-3-2-4">/etc/uwsgi/vassals/flaskr_uwsgi.ini</h4>
+<div class="outline-text-4" id="text-3-2-4">
+<div class="org-src-container">
+
+<pre class="src src-conf">[<span style="color: #228b22;">uwsgi</span>]
+<span style="color: #b22222;">#</span><span style="color: #b22222;">application's base folder</span>
+<span style="color: #a0522d;">base</span> = /var/uwsgi
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">python module to import</span>
+<span style="color: #a0522d;">app</span> = flaskr
+<span style="color: #a0522d;">module</span> = %(app)
+
+<span style="color: #a0522d;">home</span> = %(base)/venv
+<span style="color: #a0522d;">pythonpath</span> = %(base)
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">socket file's location</span>
+<span style="color: #a0522d;">socket</span> = /var/uwsgi/%n.sock
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">permissions for the socket file</span>
+<span style="color: #a0522d;">chmod-socket</span>    = 644
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">the variable that holds a flask application inside the module imported at line #6</span>
+<span style="color: #a0522d;">callable</span> = app
+
+<span style="color: #b22222;">#</span><span style="color: #b22222;">location of log files</span>
+<span style="color: #a0522d;">logto</span> = /var/log/uwsgi/%n.log
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3-2-5" class="outline-4">
+<h4 id="sec-3-2-5">chown</h4>
+<div class="outline-text-4" id="text-3-2-5">
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo chown -R www-data:www-data /var/uwsgi
+sudo chown -R www-data:www-data /var/log/uwsgi/
+</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-07-30 Sat 12:42&gt;</span></span></p>
+<p class="author">Author: Matrikslee</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

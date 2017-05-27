@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>树莓派使用 ttl 串口转 usb 连接电脑登录终端</title>
-<!-- 2017-05-16 Tue 13:40 -->
+<title>在 MIUI-7 系统中使用 Google 全家桶</title>
+<!-- 2017-05-27 Sat 23:38 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
-<meta  name="keywords" content="raspberry pi, no screen, usb to ttl, no screen" />
+<meta  name="keywords" content="fuckgfw,mobile,android,google" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -139,55 +139,119 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">树莓派使用 ttl 串口转 usb 连接电脑登录终端</h1>
+<h1 class="title">在 MIUI-7 系统中使用 Google 全家桶</h1>
 <p>
-之前买了一块树莓派 3 的板子,准备搞个服务器玩玩.
+在安卓手机上使用谷歌服务的解决方案。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">Why</h2>
+<div class="outline-text-2" id="text-1">
+<ul class="org-ul">
+<li>Q:为什么我要使用谷歌的服务?
+</li>
+<li>A:主要是国内的厂商太坑了,小米最近也开始 GG,各种广告,各种无意义的 app,还没法删除,甚至没法停用.
+</li>
+</ul>
+
+<p>
+PS: 其实最直接的诱因还是因为我在小米的应用商店里面甚至找不到一款可以愉快玩耍的 2048..
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">How</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+开始记录折腾的过程.
+</p>
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">FuckGFW</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+手机上的翻墙我还是用的 shadowsocks,不过是 shadowsocks-android,需要到 github 上去获取最新版本的 apk 安装包 ( 因为国内厂商的应用商店里面明显不会有这种东西 ).
 </p>
 
 <p>
-不过在按照网上找来的各种办法和 wiki 装上了系统,并把板子用网线与路由器连接起来之后,发现 ssh 连接被拒绝,怎么弄都没用.
+基本步骤就是到 github 上 <a href="https://github.com/shadowsocks/shadowsocks-android/releases">shadowsocks-android 项目的 releases 页面</a> 去下载 ( 当前 ) 最新版本的 apk 包,然后安装到设备上就可以了.
 </p>
 
 <p>
-试了很多遍修改树莓派里面的 <code>/etc/ssh/sshd_config</code> 文件都没用之后,在网上发现了树莓派使用 usb 转串口可以连接电脑的方法.
+为了偷懒,还是放一个 github 下载地址吧: <a href="https://github.com/shadowsocks/shadowsocks-android/releases/download/v2.9.11/shadowsocks-nightly-2.9.11.apk">shadowsocks-nightly-2.9.11.apk</a> ( 因为我决定在不久的将来把手机刷成原生的 android 系统 )
 </p>
 
 <p>
-步骤差不多如下:
+使用 shadowsocks 需要账号一枚,不过这里就不详细记录了,没意思.
 </p>
 
-<ol class="org-ol">
-<li>之后就是查树莓派三的引脚手册,找出 TX 和 RX,用杜邦线把 usb-to-ttl 接到树莓派上.
-</li>
+<p>
+然后需要在设备上对 shadowsocks 进行一下配置,我在折腾了许久之后选择的方案是 <b>设备上全局代理</b> + 流量 <b>绕过局域网和中国大陆地址</b> <sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">Get apks for google play services</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+接下来需要获取谷歌应用服务的一系列 apk 包. 一开始在百度上各种搜索不到,然后开了梯子到 google 上搜索,一下子就搜到了.
+</p>
 
-<li>把 usb 接到电脑上,如果用的是 linux 系统<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>,接上之后系统里会多出一个设备 <code>/dev/ttyUSB0</code>.
+<p>
+最后搜索到这个神奇的网站 <a href="https://www.apkmirror.com/">apk-mirror</a>, 这里面有各种应用的各种版本的 apk 包, 可以根据自己的机型选择合适的 apk 安装<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+继续偷懒,放下载地址:
+</p>
+<ul class="org-ul">
+<li>首先是 <a href="https://www.apkmirror.com/wp-content/themes/APKMirror/download.php?id=66284">Google Play services 8.7.03 (2645110-030)</a>
 </li>
+<li>然后是 <a href="https://www.apkmirror.com/wp-content/themes/APKMirror/download.php?id=68144">Google Play Store 6.2.13.A-all 0 2655766</a>
+</li>
+</ul>
+</div>
+</div>
 
-<li>检查是否安装了 <a href="https://www.gnu.org/software/screen/">GNU Screen</a>, 在终端下输入 <code>screen -v</code> 会出现该软件的版本信息,如果出现的是 <code>command not found</code>, 则需要安装<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
-</li>
-
-<li>使用 <code>screen</code> 命令连接树莓派终端, 在终端下输入 <code>screen /dev/ttyUSB0 115200</code>,第二个参数是 usb-to-ttl 设备名,第三个参数是波特率,如果树莓派没有经过特殊配置,默认为 115200.
-</li>
-</ol>
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">Get applications from google play store</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+接下来就是各种愉快的下载软件了.
+</p>
+</div>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-其他系统没测试过,应该是要装驱动的,不过我用的 Arch,udev 自带驱动,好像会自动装载.
-</p></div>
+一开始为了防止流量浪费,使用的分应用代理,然后发现各种不方便,因为每安装一个应用都需要:
+</p>
+<ol class="org-ol">
+<li>跑到 ss 里面先把连接断开,
+</li>
+<li>把新装的应用添加到代理列表里面,
+</li>
+<li>再启动连接.
+</li>
+</ol></div>
 
 <div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-一般的 linux 发行版的官方仓库都有,如果没有,通过包管理器或者下载二进制文件安装.
-</p></div>
+个人感觉还是一定要来这个网站下载 apk 包,而不是用墙内的什么 <code>谷歌应用安装器</code> 之类的东西, 有几个缺点:
+</p>
+<ul class="org-ul">
+<li>首先是那些软件不知道有多久没有维护了,而且制作也很简陋,因为使用过所以说说,应用安装后在使用的过程中会出现各种奇葩的错误.
+</li>
+<li>然后是安装的软件版本老旧,用那种软件安装的谷歌软件都是很久很久以前的版本了,跟新的系统可能产生兼容性问题.
+</li>
+</ul></div>
 
 
 </div>
 </div></div>
 <div id="postamble" class="status">
-<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-05-01 Mon&gt;</span></span></p>
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-03-08 Tue&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
-<p class="date">Created: 2017-05-16 Tue 13:40</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"></p>
 </div>

@@ -3,12 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>记一次画蛇添足的 netctl 故障排查</title>
-<!-- 2017-05-22 Mon 22:19 -->
+<title>出现次数超过一半的数字</title>
+<!-- 2017-05-27 Sat 23:38 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
-<meta  name="keywords" content="Arch, netctl, network" />
+<meta  name="keywords" content="algorithm" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -139,89 +139,93 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">记一次画蛇添足的 netctl 故障排查</h1>
-<div id="table-of-contents">
-<h2>Table of Contents</h2>
-<div id="text-table-of-contents">
-<ul>
-<li><a href="#sec-1">问题</a></li>
-<li><a href="#sec-2">解决办法</a>
-<ul>
-<li><a href="#sec-2-1">完美的画蛇添足</a></li>
-<li><a href="#sec-2-2">万能的 google 和 arch 论坛</a></li>
-</ul>
+<h1 class="title">出现次数超过一半的数字</h1>
+<p>
+N 久没刷题,如今已经菜的不要不要的了.
+</p>
+
+<p>
+今天看到新生群里在讨论他们的作业,于是我进去看了看题目.
+</p>
+
+<p>
+读完题目,嗯,懂了,就是要找 n 个数里面是否存在一个出现次数超过总数一半的数字嘛,存在则输出该数字,否则输出-1.
+</p>
+
+<p>
+嗯,map 搞起,于是 TLE 之. 好丢脸有木有.
+</p>
+
+<p>
+嗯,再想想?哦,排序,对了,排序嘛. 于是又 TLE 之, 坑.
+</p>
+
+<p>
+终于看了看输入数据的规模, woc, N&lt;=200W. wocccccccc
+</p>
+
+<p>
+嗯,终于发现了,需要 O(n) 的算法,于是想之; O(n)? 那不就是 hash 算法了嘛,于是写之,依旧 TLE 之.
+</p>
+
+<p>
+于是继续想方法; woc,想不出来了,好菜啊......
+</p>
+
+<p>
+于是 google 之,得一算法,嗯,如下:
+</p>
+
+<ol class="org-ol">
+<li>首先记录两个变量: <code>times = 0, X = 0</code>.
 </li>
-</ul>
-</div>
-</div>
+<li>循环: 遍历每一个数字 <code>A[i]</code>,执行该语句 <code>times==0? {times=1, X=A[i]}:{A[i]==X? times++:times--;}</code>
+</li>
+</ol>
 
-<div id="outline-container-sec-1" class="outline-2">
-<h2 id="sec-1">问题</h2>
-<div class="outline-text-2" id="text-1">
 <p>
-由于某些原因，netctl 在启动 profile 的时候会出现如下问题：
+最后得到的结论是: 当存在出现次数超过总次数一半的数字,那么一定是 X;
+因此最后只需要再判断 X 出现的次数是否超过总数的一半即可.
+</p>
+
+<p>
+最后的最后再贴一下代码吧.
 </p>
 <div class="org-src-container">
 
-<pre class="src src-plain">Job for netctl@wlp2s0\x2d429.service failed because the control process exited with error code.
-See "systemctl status "netctl@wlp2s0\\x2d429.service"" and "journalctl -xe" for details.
+<pre class="src src-C"><span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdio.h&gt;</span>
+<span style="color: #483d8b;">#include</span> <span style="color: #8b2252;">&lt;stdlib.h&gt;</span>
+
+<span style="color: #228b22;">int</span> <span style="color: #0000ff;">main</span>(<span style="color: #228b22;">int</span> <span style="color: #a0522d;">argc</span>, <span style="color: #228b22;">char</span> <span style="color: #a020f0;">const</span> *<span style="color: #a0522d;">argv</span>[]){
+        <span style="color: #228b22;">long</span> <span style="color: #228b22;">long</span> <span style="color: #a0522d;">luckNumber</span>=0;
+        <span style="color: #228b22;">int</span> <span style="color: #a0522d;">n</span>, <span style="color: #a0522d;">i</span>, <span style="color: #a0522d;">times</span>;
+        scanf(<span style="color: #8b2252;">"%d"</span>, &amp;n);
+        <span style="color: #228b22;">long</span> <span style="color: #228b22;">long</span> *<span style="color: #a0522d;">A</span> = (<span style="color: #228b22;">long</span> <span style="color: #228b22;">long</span> *)malloc(<span style="color: #228b22;">n</span>*<span style="color: #a020f0;">sizeof</span>(<span style="color: #228b22;">long</span> <span style="color: #228b22;">long</span>));
+        <span style="color: #a020f0;">for</span>( times = i = 0; i &lt; n; ++ i ) {
+                scanf(<span style="color: #8b2252;">"%lld"</span>, A+i);
+                <span style="color: #a020f0;">if</span>(times==0){ luckNumber = A[i]; times=1; }
+                <span style="color: #a020f0;">else</span> {
+                        <span style="color: #a020f0;">if</span>(A[i]==luckNumber){ ++times; }
+                        <span style="color: #a020f0;">else</span> { --times; }
+                }
+        }
+        <span style="color: #a020f0;">for</span> ( times = i = 0; i &lt; n; ++ i ) {
+                <span style="color: #a020f0;">if</span>(A[i]==luckNumber) {
+                        ++times;
+                }
+        }
+        <span style="color: #a020f0;">if</span>(times&gt;=n/2) { printf(<span style="color: #8b2252;">"%lld</span><span style="color: #8b2252; font-weight: bold;">\</span><span style="color: #8b2252; font-weight: bold;">n</span><span style="color: #8b2252;">"</span>, luckNumber); }
+        <span style="color: #a020f0;">else</span> { printf(<span style="color: #8b2252;">"-1</span><span style="color: #8b2252; font-weight: bold;">\</span><span style="color: #8b2252; font-weight: bold;">n</span><span style="color: #8b2252;">"</span>); }
+        free(A);
+        <span style="color: #a020f0;">return</span> 0;
+}
 </pre>
-</div>
-<p>
-然后是不管如何使用 netctl 和 systemctl 都无法使用该 wireless interface 联网。
-</p>
-</div>
-</div>
-<div id="outline-container-sec-2" class="outline-2">
-<h2 id="sec-2">解决办法</h2>
-<div class="outline-text-2" id="text-2">
-</div><div id="outline-container-sec-2-1" class="outline-3">
-<h3 id="sec-2-1">完美的画蛇添足</h3>
-<div class="outline-text-3" id="text-2-1">
-<p>
-使用`systemctl status`和`journalctl`命令都只能得到如下的信息：
-</p>
-<div class="org-src-container">
-
-<pre class="src src-plain">network[20502]: Starting network profile 'wlp2s0-429'...
-network[20502]: The interface of network profile 'wlp2s0-429' is already up
-systemd[1]: netctl@wlp2s0\x2d429.service: Main process exited, code=exited, status=1/FAILUR
-systemd[1]: Failed to start Automatically generated profile by wifi-menu.
-</pre>
-</div>
-<p>
-然后这样做并不能解决此问题。
-</p>
-</div>
-</div>
-<div id="outline-container-sec-2-2" class="outline-3">
-<h3 id="sec-2-2">万能的 google 和 arch 论坛</h3>
-<div class="outline-text-3" id="text-2-2">
-<p>
-事实证明，能够发现并解决这个问题，还是要靠的 google 大神，然后万能的 google 大神又把我指引到了万能的 Archlinux 论坛。
-</p>
-
-<p>
-然后在论坛的<a href="https://bbs.archlinux.org/viewtopic.php?id=162582">这篇讨论中</a>， 我发现我曾经那么多次是如此靠近成功。
-</p>
-
-<p>
-因为其实之前我多次执行的操作其实只要进行前半部分就可以了，是我自己画蛇添足了。
-</p>
-<div class="org-src-container">
-
-<pre class="src src-sh">sudo ip link set wlp2s0 down
-sudo netctl start wlp2s0-429
-</pre>
-</div>
-</div>
-</div>
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-05-22 Mon&gt;</span></span></p>
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-10-08 Sat&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
-<p class="date">Created: 2017-05-22 Mon 22:19</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"></p>
 </div>

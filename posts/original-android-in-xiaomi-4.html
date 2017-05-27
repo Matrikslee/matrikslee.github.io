@@ -3,11 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>墨的碎碎念</title>
+<title>在小米 4 手机上刷原生安卓系统</title>
 <!-- 2017-05-27 Sat 23:38 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="Android MIUI" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -138,17 +139,117 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">墨的碎碎念</h1>
-<ul class="org-ul">
-<li><a href="posts/index.html">文章列表</a>
-</li>
-<li><a href="guestbook.html">留言板</a>
-</li>
-<li><a href="links.html">链接</a>
-</li>
-</ul>
+<h1 class="title">在小米 4 手机上刷原生安卓系统</h1>
+<p>
+在小米 4 手机上刷原生安卓系统的解决方案。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">写在前面</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+趁着刚刚开学,时间还很充裕,于是耐不住 google services 诱惑的我在看了 <a href="http://www.miui.com/thread-3518792-1-1.html">这个帖子</a> 之后果断开始了我的刷机之旅.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">折腾过程</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+总的来说,折腾的过程很蛋疼,失败了无数次,在一天的时间内,我的手机起码被我格式化了 10 次不止,刷过的安装包有 5 个以上,一个包至少是 3 次.
+</p>
+</div>
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">秋大版原生安卓的体验</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+第一次我直接用小米系统自带的更新功能把包刷进去,然后悲剧的变砖了.然后在 <a href="http://www.miui.com/thread-3476099-1-1.html">这个帖子</a> 里找到了正确的刷机姿势. 然后成功的刷入了系统.
+</p>
+
+<p>
+刷完之后,兴高采烈的开机,悲剧的发现,这是一个真真正正的裸机. 不带有任何类似应用商店的服务. 于是我开始找刷入 google services 的方法 ( 毕竟我本来就是为了用 google services)
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">miui 英文论坛的安装包</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+我到 miui 的英文论坛去找 miui 国际版, 因为论坛里的人们说 miui 国际版自带 google 服务.然而第一次我下载了一个 china 版本的刷入了手机.
+</p>
+
+<p>
+第二次第三次,刷 global 包各种失败,看了无数帖子,用了好几种感觉靠谱的方法,卡刷,线刷都试过了. 都不行,不知道为什么.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">秋大版原生安卓 +gapps 包</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+在失败了数次之后,发现了 <a href="http://www.miui.com/thread-3642592-1-1.html">这个帖子</a>, 发现可以用秋大做的原生安卓系统, 然后刷入 opengapps 那里下载的 google 服务包,接下来我就又开始折腾了,但是下载 gapps 各种失败.
+</p>
+
+<p>
+PS:在这里吐槽一下亚马逊云, 因为 github 的下载服务用的亚马逊的云服务,我不知道是天朝的墙的原因还是回事那么别的原因,下载过程各种中断,好多次都是下载到 90%多,然后断掉了.
+</p>
+
+<p>
+第一次下载好了一次 pico 的包,然后刷入了秋大版的原生安卓,发现各种 google services 已经停止这种错误,然后我以为刷一个 google services 更全的包也许就好了 ( 然而这并没有什么卵用 ).
+</p>
+
+<p>
+后来成功的下载好了一次 full,激动的准备刷入手机,发现无论怎么弄都弄不进去,后来查看错误日志才发现是收集的 system 分区太小 ( 用秋大的工具弄出来的只有 1.2G),最后悲伤的面对现实,刷入 <b>秋大版安卓 6.0+gapps-pico</b>
+</p>
+
+<p>
+现在我的手机里用的就是 pico 的包,然后再自己手动安装需要的 google apps.
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">后记</h2>
+<div class="outline-text-2" id="text-3">
+</div><div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">最后的 bug</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+不知道为什么,最后一次刷机的时候 ota 包无法被刷入,我简直...
+</p>
+
+<p>
+不知道还有没有机会刷进去了.
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">刷完 google services 开机设置问题</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+使用谷歌服务的时候,开机会需要进行设置.
+</p>
+
+<p>
+但是因为天朝的网络环境,这个过程会一直卡在检查网络设置那里,这时候需要一定的姿势才能正常进入手机.
+</p>
+
+<p>
+其实最理想的方法是弄一个 fq 路由器,可惜,我没那条件.
+</p>
+
+<p>
+于是把 SIM 卡拔出来,然后跳过 WIFI,就可以继续设置向导,进入手机之后装上梯子,然后就可以用google的服务了.
+</p>
+</div>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-03-10 Thu&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
 <p class="date">Created: 2017-05-27 Sat 23:38</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>

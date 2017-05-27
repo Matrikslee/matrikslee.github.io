@@ -1,0 +1,316 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>Linux 下搭建汇编语言学习环境</title>
+<!-- 2017-05-27 Sat 23:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="linux, asm" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">Linux 下搭建汇编语言学习环境</h1>
+<p>
+linux 下搭建汇编编程环境的解决方案。
+</p>
+
+<p>
+由于某些专业课的需要，我必须要考虑把汇编语言这个东西学一学了，不然有挂科就麻烦了。
+</p>
+
+<p>
+由于本渣英语水平实在有限，所以又在谷歌上找了一篇中文教程，这里贴上 PDF 的下载地址， 该 PDF 的排版十分之用心，看起来特别舒服。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">NASM</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+在谷歌上搜了搜关于汇编的东西，找到了 NASM 这个工具。
+</p>
+
+<p>
+进入 NASM 的 <a href="http://nasm.us">官方网站</a> , 看了看它的介绍和说明，我机智的跑到 CLI 下使用了 <code>sudo apt-get install nasm</code> ， 果然不出我所料，竟然可以安装。
+</p>
+</div>
+
+<div id="outline-container-sec-1-1" class="outline-3">
+<h3 id="sec-1-1">使用 NASM 编译汇编程序</h3>
+<div class="outline-text-3" id="text-1-1">
+<p>
+nasm 有了，那么如何使用呢？编译器装好了，可是却不会用，这就是有点尴尬了。
+</p>
+
+<p>
+我根据 <a href="http://www.tutorialspoint.com/assembly_programming/">这篇英文教程</a> 简单的写了一个 hello world 程序, 保存为 hello.asm, 然后 <code>nasm hello.asm</code>, 发现除了生成一个不可执行的 hello 文件,其他的什么也没发生。
+</p>
+
+<p>
+有点沮丧的我决定继续看教程，果不其然，我在教程的底下发现了用 nasm 编译汇编程序的方法。
+</p>
+
+<p>
+现在我有一个 hello.asm ( 代码来源于上面的教程）, 它的内容如下：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-assembly">section .text
+    global _start   ;must be declared for linker (ld)
+_start:             ;tells linker entry point
+    mov edx,len     ;message length
+    mov ecx,msg     ;message to write
+    mov ebx,1       ;file descriptor (stdout)
+    mov eax,4       ;system call number (sys_write)
+    int 0x80        ;call kernel
+
+    mov eax,1       ;system call number (sys_exit)
+    int 0x80        ;call kernel
+
+section .data
+msg db 'Hello, world!', 0xa  ;string to be printed
+len equ $ - msg     ;length of the string
+</pre>
+</div>
+
+<p>
+现在我需要编译并执行这个程序，我在教程底下找到的方法如下
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">nasm -f elf hello.asm 2&gt;&amp;1 #将汇编代码编译成目标文件
+ld -m elf_i386 -s -o hello hello.o 2&gt;&amp;1 #使用链接器把目标文件链接成可执行程序
+./hello #运行程序
+</pre>
+</div>
+
+<p>
+通过我的多次编译运行，我发现，就这个 hello,world 程序而言，编译语句后面的 <code>2&gt;&amp;1</code>, 似乎没有什么用。
+</p>
+
+<p>
+第一句话的作用是把 hello.asm 这个汇编程序代码编译成目标文件，一般是后缀为 <code>.o</code> 的文件，这里会生成一个 <code>hello.o</code>.
+</p>
+
+<p>
+第二句话的作用是把 hello.o 链接成一个可执行程序，可执行程序的文件名为第五个参数 hello，是链接器的输出，后面的 <code>.o</code> 文件是链接器的输入。
+</p>
+
+<p>
+今天花了一个多小时就只学到了这么多，更多的用法以后再说吧。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">DOSBOX + MASM</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+弄好了 nasm，准备开始按照教程开始学习，刚刚把 hello，world 程序写完，发现 nasm 没法编译，天坑。
+</p>
+
+<p>
+于是又开始找谷歌大神，然后发现了现在这种办法。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">安装 dosbox</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+这个很简单
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">sudo apt-get update
+sudo apt-get install dosbox
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">下载 masm</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+在网络上发现了这个好东西： <a href="https://drive.google.com/file/d/0B1vDpKDZnvafbWVULVdOTEh2SlE/view">8086_Assembler</a>(from google drive)
+</p>
+
+<p>
+下载并解压后放到系统的某个位置，我放在了 <code>~/tools/8086</code>.
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">配置 dosbox</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+现在工具都下载好了，如何使用呢？经过我的折腾，我发现其实很简单，修改 dosbox 的配置文件就可以了。
+</p>
+
+<p>
+dosbox 的配置文件位于 <code>~/.dosbox/dosbox-0.74.conf</code>
+</p>
+
+<p>
+编辑它并在文件末尾加上三句话就可以了
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-plain">mount C ~/tools/8086 \\
+mount D ~/workspace/asm \\
+path=Z:\;C:\  \\
+</pre>
+</div>
+
+<p>
+之后只需要运行 dosbox 就可以用 masm 的所有命令了。
+</p>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-05-21 Sat&gt;</span></span></p>
+<p class="author">Author: Matrikslee</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

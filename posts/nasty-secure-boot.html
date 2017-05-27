@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<title>恶心的 Secure Boot</title>
+<!-- 2017-05-27 Sat 23:38 -->
+<meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta  name="generator" content="Org-mode" />
+<meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="bootloader,grub" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  pre.src-sh:before    { content: 'sh'; }
+  pre.src-bash:before  { content: 'sh'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-R:before     { content: 'R'; }
+  pre.src-perl:before  { content: 'Perl'; }
+  pre.src-java:before  { content: 'Java'; }
+  pre.src-sql:before   { content: 'SQL'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.right  { text-align: center;  }
+  th.left   { text-align: center;   }
+  th.center { text-align: center; }
+  td.right  { text-align: right;  }
+  td.left   { text-align: left;   }
+  td.center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara:nth-child(2) { display: inline; }
+  .footpara { display: block; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  /*]]>*/-->
+</style>
+<link rel='stylesheet' type='text/css' href='/css/style.css'/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2013 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="content">
+<h1 class="title">恶心的 Secure Boot</h1>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">问题</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+今天下午不知道为什么十分手贱的在开机的时候进入了 BIOS setup 然后把 leagcy 引导关掉了，打开了 secure boot。
+</p>
+
+<p>
+然后电脑就开始雪崩，我电脑的情况在 V2EX 上贴过了，这里就不重复贴内容了，V2EX 的问题详见脚注<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">解决办法</h2>
+<div class="outline-text-2" id="text-2">
+</div><div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">寻找解决方案的过程</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+在开机启动的时候 BIOS 提醒我说 <b>Ubuntu is blocked by current security policy.</b>
+</p>
+
+<p>
+然后我的 win7 也被提醒 <b>Windows Boot Manager has been blocked by the current security policy.</b>
+</p>
+
+<p>
+然后按了两次 <code>OK</code> 然后机器开始 <code>checking media</code> ， 然后我把我所有的启动盘都试了试，然后发现只有一个 <code>ubuntn livecd</code> 可以用。
+</p>
+
+<p>
+然后进入到 live 系统，发现自己还是不知道如何修复这个问题，于是上 V2EX 提问。
+</p>
+
+<p>
+然后在好心网友 (<a href="https://www.v2ex.com/member/fcicq">@fcicq</a>) 的回复和自己通过搜索引擎<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>找的一些资料<sup><a id="fnr.3" name="fnr.3" class="footref" href="#fn.3">3</a></sup>，解决了这个问题，详细步骤在下面。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">具体解决步骤</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+首先引导进入 livecd，然后连上网络,执行下面的这些命令：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">sudo -i
+apt-get update
+apt-get install grub-efi-amd64-signed
+mount /dev/sda3 /mnt #这里根据自己的分区来
+mount /dev/sda1 /mnt/boot/efi #这里是 ESP 分区 视情况而定
+mount --bind /dev /mnt/dev
+mount --bind /sys /mnt/sys
+mount --bind /proc /mnt/proc
+chroot /mnt
+grub-install /dev/sda --uefi-secure-boot
+exit
+</pre>
+</div>
+
+<p>
+然后根据在资料中找到的指示<sup><a id="fnr.4" name="fnr.4" class="footref" href="#fn.4">4</a></sup>，我下载了一个一些文件，包括一个 <code>keys 文件夹</code> 和一个 <code>sb-setup</code> 脚本，把他们放到 <code>/tmp/sb-setup/</code> 下面， 然后用命令安装。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">cd /tmp/sb-setup
+chmod +x sb-setup
+./sb-set enroll microsoft
+</pre>
+</div>
+
+<p>
+然后重启电脑。应该就可以进入 grub 了。
+</p>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">最后一些小问题</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+因为某些不可知的原因，在重新引导进入系统后，我的电脑需要使用如下命令来修复一下软件包。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo aptitude install -f
+sudo aptitude remove
+sudo update-grub
+</pre>
+</div>
+<p>
+还有一个问题，我在尝试引导 windows7 的时候出错了，错误信息挺多的，我也没有记全，大概是什么路径错误之类的乱七八糟的问题吧。
+</p>
+
+<p>
+其实我也不是怎么用 windows7 加上智能车比赛已经结束，不需要我再打开 windows 7 来用 KEIL 写代码了，老师也暂时还没有布置 FPGA 作业，所以不急，这个问题慢慢来。
+</p>
+</div>
+</div>
+<div id="footnotes">
+<h2 class="footnotes">Footnotes: </h2>
+<div id="text-footnotes">
+
+<div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
+<a href="https://www.v2ex.com/t/284927">https://www.v2ex.com/t/284927</a>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
+竟然是百度你能信？因为 livecd 里面安装 ss 在每次重启后都会丢失，所以我也就懒得每次都安装 ss 了。
+</p></div>
+
+<div class="footdef"><sup><a id="fn.3" name="fn.3" class="footnum" href="#fnr.3">3</a></sup> <p class="footpara">
+参考资料：
+SecurityTeam/SecureBoot - Ubuntu Wiki: <a href="https://wiki.ubuntu.com/SecurityTeam/SecureBoot">https://wiki.ubuntu.com/SecurityTeam/SecureBoot</a>
+UEFI/SecureBoot - Ubuntu Wiki: <a href="https://wiki.ubuntu.com/UEFI/SecureBoot">https://wiki.ubuntu.com/UEFI/SecureBoot</a>
+</p></div>
+
+<div class="footdef"><sup><a id="fn.4" name="fn.4" class="footnum" href="#fnr.4">4</a></sup> <p class="footpara">
+<a href="https://wiki.ubuntu.com/SecurityTeam/SecureBoot#Shim_bootloader_signed_with_Microsoft_key">https://wiki.ubuntu.com/SecurityTeam/SecureBoot#Shim_bootloader_signed_with_Microsoft_key</a>
+</p></div>
+
+
+</div>
+</div></div>
+<div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-06-11 Sat&gt;</span></span></p>
+<p class="author">Author: Matrikslee</p>
+<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
+<p class="validation"></p>
+</div>
+</body>
+</html>

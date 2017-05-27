@@ -3,11 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>墨的碎碎念</title>
+<title>关于 DNS 的一些折腾</title>
 <!-- 2017-05-27 Sat 23:38 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="linux, dns" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -138,17 +139,174 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">墨的碎碎念</h1>
+<h1 class="title">关于 DNS 的一些折腾</h1>
+<p>
+加速 DNS 查询速度并防止 DNS 污染和 DNS 劫持的解决方案。
+</p>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">前言</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+今天下午神奇的遇到了一件奇怪的事情，我无法访问 github 了！
+于是用命令 dig 了一下 github.com，得到了下面的结果，差点没把我吓死。
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-plain">; &lt;&lt;&gt;&gt; DiG 9.9.5-3ubuntu0.8-Ubuntu &lt;&lt;&gt;&gt; github.com \\
+;; global options: +cmd \\
+;; Got answer: \\
+;; -&gt;&gt;HEADER&lt;&lt;- opcode: QUERY, status: NOERROR, id: 3569 \\
+;; flags: qr aa rd ra; QUERY: 1, ANSWER: 1, AUTHORITY: 0, ADDITIONAL: 0 \\
+
+;; QUESTION SECTION: \\
+;github.com.                    IN      A \\
+
+;; ANSWER SECTION: \\
+github.com.             0       IN      A       1.1.1.1 \\
+
+;; Query time: 8 msec \\
+;; SERVER: 127.0.0.1#53(127.0.0.1) \\
+;; WHEN: Mon May 02 12:49:41 CST 2016 \\
+;; MSG SIZE  rcvd: 44 \\
+</pre>
+</div>
+
+<p>
+这 DNS 污也太严重了吧,我可是用了 dnsmasq 的，简直无法想像。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">折腾过程</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+因为上述原因，我只能重新折腾一下 DNS 了。
+</p>
+
+<p>
+可能因为原本只是单蠢的使用了 dnsmasq，所以出现了这个问题。我这样告诉自己。
+</p>
+
+<p>
+于是我花了点时间在电脑上安装了 dnscrypt，使用 dnscrypt 作为 dnsmasq 的前置代理。
+</p>
+</div>
+
+<div id="outline-container-sec-2-1" class="outline-3">
+<h3 id="sec-2-1">安装 dnscrypt-proxy</h3>
+<div class="outline-text-3" id="text-2-1">
+<p>
+至于 dnsmasq 的安装方法我就不说了，直接 <code>sudo apt-get install dnsmasq</code> 即可
+</p>
+
+<p>
+dnscrypt 的安装需要如下三步：
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">sudo add-apt-repository ppa:anton+/dnscrypt
+sudo apt-get update
+sudo apt-get install dnscrypt-proxy
+</pre>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-2-2" class="outline-3">
+<h3 id="sec-2-2">配置 dnscrypt 以便 dnsmasq 连接</h3>
+<div class="outline-text-3" id="text-2-2">
+<p>
+dnscrypt 的配置文件为 <code>/etc/default/dnscrypt-proxy</code>
+</p>
+
+<p>
+编辑这个文件，修改 <code>local-address=127.0.0.2:53</code> 这一行为 <code>local-address=127.0.0.1:5301</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-3" class="outline-3">
+<h3 id="sec-2-3">配置 dnsmasq</h3>
+<div class="outline-text-3" id="text-2-3">
+<p>
+dnsmasq 的配置文件为 <code>/etc/dnsmasq.conf</code>
+</p>
+
+<p>
+编辑它，取消掉 <code>no-resolv</code> 和 <code>no-poll</code> 这两行前的注释,并在文件的末尾添加 <code>server=127.0.0.1#5301</code>
+</p>
+
+<p>
+PS:不知道为什么使用 dnscrypt 的默认配置的监听端口 <b>127.0.0.2#53</b> ， 然后在 dnsmasq 这里设置 <code>serve=127.0.0.2#53</code> 是没有用的，好奇怪。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-4" class="outline-3">
+<h3 id="sec-2-4">修改系统的 DNS</h3>
+<div class="outline-text-3" id="text-2-4">
+<p>
+系统的 DNS 配置文件为 <code>/etc/resolv.conf</code>, 编辑这个文件，把该文件的第一行非注释语句改为 <code>nameserver 127.0.0.1</code>
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-2-5" class="outline-3">
+<h3 id="sec-2-5">重启所有服务令配置生效</h3>
+<div class="outline-text-3" id="text-2-5">
+<p>
+修改好了配置之后需要把涉及到的服务全部重启一下，让配置生效，执行如下命令
+</p>
+
+<div class="org-src-container">
+
+<pre class="src src-bash">sudo service dnscrypt-proxy restart
+sudo service dnsmasq restart
+sudo service networking restart
+</pre>
+</div>
+</div>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">后记-关于 dig 命令的使用</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+dig 命令是个好命令：
+</p>
+
 <ul class="org-ul">
-<li><a href="posts/index.html">文章列表</a>
+<li>查看 dig 命令的手册： <code>man dig</code>
 </li>
-<li><a href="guestbook.html">留言板</a>
+<li>使用系统的默认设置查询域名记录： <code>dig &lt;domain&gt;</code>
 </li>
-<li><a href="links.html">链接</a>
+<li>使用指定的 DNS 服务器查询域名记录： <code>dig &lt;domain&gt; @&lt;dns server address&gt;</code>
 </li>
 </ul>
+
+<p>
+注：
+</p>
+<ul class="org-ul">
+<li><b>&lt;domain&gt;</b> 为想要查询的域名，例如要查 google 的域名： <code>dig google.com</code>
+</li>
+<li><b>&lt;dns server address&gt;</b> 是想要使用的 dns 服务器的地址，例如用 google 的 dns 查询 google 的域名： <code>dig google.com @8.8.8.8</code>
+</li>
+</ul>
+
+<p>
+我也就知道这么多了吧。
+</p>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2016-05-02 Mon&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
 <p class="date">Created: 2017-05-27 Sat 23:38</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
