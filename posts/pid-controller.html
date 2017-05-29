@@ -4,11 +4,11 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>经典控制器-PID</title>
-<!-- 2017-05-27 Sat 23:38 -->
+<!-- 2017-05-29 Mon 17:56 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
-<meta  name="keywords" content="controller, algorithm" />
+<meta  name="keywords" content="controller, PID-controller" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -181,15 +181,40 @@ for the JavaScript code in this tag.
 <body>
 <div id="content">
 <h1 class="title">经典控制器-PID</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">PID 的简单介绍</a></li>
+<li><a href="#sec-2">PID 控制器的一般规律</a>
+<ul>
+<li><a href="#sec-2-1">PID 控制器系数的定性分析</a></li>
+</ul>
+</li>
+<li><a href="#sec-3">PID 算法的数学模型</a>
+<ul>
+<li><a href="#sec-3-1">经典模型</a></li>
+<li><a href="#sec-3-2">离散化模型</a></li>
+</ul>
+</li>
+<li><a href="#sec-4">PID 控制器的应用和实现</a>
+<ul>
+<li><a href="#sec-4-1">积分分离的 PID 控制器</a></li>
+<li><a href="#sec-4-2">PID 控制器的 C 语言实现</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
 <p>
-PID 是历史最久,应用最广,适应性最强的一种控制方式.<br  />
+PID 是历史最久,应用最广,适应性最强的一种控制方式.
 </p>
 
 <div id="outline-container-sec-1" class="outline-2">
 <h2 id="sec-1">PID 的简单介绍</h2>
 <div class="outline-text-2" id="text-1">
 <p>
-网络上有很多关于 PID 的资料,我查看的最多的就是 <a href="https://zh.wikipedia.org/wiki/PID%E6%8E%A7%E5%88%B6%E5%99%A8">PID 控制器 - 维基百科，自由的百科全书</a>.个人认为其内容比较准确.各种公式和解释都可以在其中找到.<br  />
+网络上有很多关于 PID 的资料,我查看的最多的就是 <a href="https://zh.wikipedia.org/wiki/PID%E6%8E%A7%E5%88%B6%E5%99%A8">PID 控制器 - 维基百科，自由的百科全书</a>.个人认为其内容比较准确.各种公式和解释都可以在其中找到.
 </p>
 
 <pre class="example">
@@ -199,8 +224,8 @@ PID 控制，实际中也有 PI 和 PD 控制。PID 控制器就是根据系统�
 </pre>
 
 <p>
-在最开始学习 PID 的时候,我在网络上找到了这篇文 <a href="http://sanwen.net/a/cluzeoo.html">PID 控制原理：看完这三个故事，你就明白了</a>, 其内容通俗易懂,看完之后可以对 PID 有一个简单的理解.<br  />
-在这里,我引用其中的一段.<br  />
+在最开始学习 PID 的时候,我在网络上找到了这篇文 <a href="http://sanwen.net/a/cluzeoo.html">PID 控制原理：看完这三个故事，你就明白了</a>, 其内容通俗易懂,看完之后可以对 PID 有一个简单的理解.
+在这里,我引用其中的一段.
 </p>
 </div>
 </div>
@@ -208,11 +233,11 @@ PID 控制，实际中也有 PI 和 PD 控制。PID 控制器就是根据系统�
 <h2 id="sec-2">PID 控制器的一般规律</h2>
 <div class="outline-text-2" id="text-2">
 <ul class="org-ul">
-<li><b>比例控制 P</b> 比例控制考虑当前误差,误差值和一个正值的常数 Kp( 表示比例 ) 相乘.Kp 只是在控制器的输出和系统的误差成比例的时候成立.比例控制是一种最简单的控制方式.其控制器的输出与输入误差信号成比例关系.当仅有比例控制时系统输出存在稳态误差.<br  />
+<li><b>比例控制 P</b> 比例控制考虑当前误差,误差值和一个正值的常数 Kp( 表示比例 ) 相乘.Kp 只是在控制器的输出和系统的误差成比例的时候成立.比例控制是一种最简单的控制方式.其控制器的输出与输入误差信号成比例关系.当仅有比例控制时系统输出存在稳态误差.
 </li>
-<li><b>积分控制 I</b> 积分控制考虑过去误差,将误差值过去一段时间和 ( 误差和 ) 乘以一个正值的常数 Ki.Ki 从过去的平均误差值来找到系统的输出结果和预定值的平均误差.一个简单的比例系统会震荡,会在预定值的附近来回变化,因为系统无法消除多余的纠正.通过加上负的平均误差值.平均系统误差值就会渐渐减少.<br  />
+<li><b>积分控制 I</b> 积分控制考虑过去误差,将误差值过去一段时间和 ( 误差和 ) 乘以一个正值的常数 Ki.Ki 从过去的平均误差值来找到系统的输出结果和预定值的平均误差.一个简单的比例系统会震荡,会在预定值的附近来回变化,因为系统无法消除多余的纠正.通过加上负的平均误差值.平均系统误差值就会渐渐减少.
 </li>
-<li><b>微分控制 D</b> 微分控制考虑将来误差,计算误差的一阶导,并和一个正值的常数 Kd 相乘.这个导数的控制会对系统的改变作出反应.导数的结果越大,那么控制系统就对输出结果作出更快速的反应.这个 Kd 参数也是 PID 被称为可预测的控制器的原因.Kd 参数对减少控制器短期的改变很有帮助.一些实际中的速度缓慢的系统可以不需要 Kd 参数.<br  />
+<li><b>微分控制 D</b> 微分控制考虑将来误差,计算误差的一阶导,并和一个正值的常数 Kd 相乘.这个导数的控制会对系统的改变作出反应.导数的结果越大,那么控制系统就对输出结果作出更快速的反应.这个 Kd 参数也是 PID 被称为可预测的控制器的原因.Kd 参数对减少控制器短期的改变很有帮助.一些实际中的速度缓慢的系统可以不需要 Kd 参数.
 </li>
 </ul>
 </div>
@@ -221,11 +246,11 @@ PID 控制，实际中也有 PI 和 PD 控制。PID 控制器就是根据系统�
 <h3 id="sec-2-1">PID 控制器系数的定性分析</h3>
 <div class="outline-text-3" id="text-2-1">
 <ul class="org-ul">
-<li>增大比例系数 P 一般将加快系统的响应，在有静差的情况下有利于减小静差，但是过大的比例系数会使系统有比较大的超调，并产生振荡，使稳定性变坏。<br  />
+<li>增大比例系数 P 一般将加快系统的响应，在有静差的情况下有利于减小静差，但是过大的比例系数会使系统有比较大的超调，并产生振荡，使稳定性变坏。
 </li>
-<li>增大积分时间 I 有利于减小超调，减小振荡，使系统的稳定性增加，但是系统静差消除时间变长。<br  />
+<li>增大积分时间 I 有利于减小超调，减小振荡，使系统的稳定性增加，但是系统静差消除时间变长。
 </li>
-<li>增大微分时间 D 有利于加快系统的响应速度，使系统超调量减小，稳定性增加，但系统对扰动的抑制能力减弱。<br  />
+<li>增大微分时间 D 有利于加快系统的响应速度，使系统超调量减小，稳定性增加，但系统对扰动的抑制能力减弱。
 </li>
 </ul>
 </div>
@@ -239,22 +264,22 @@ PID 控制，实际中也有 PI 和 PD 控制。PID 控制器就是根据系统�
 <h3 id="sec-3-1">经典模型</h3>
 <div class="outline-text-3" id="text-3-1">
 <p>
-PID 算法的经典模型可用如下公式进行表示:<br  />
-$$u(t)=K_p{e(t)}+K_i\int_0^t{e(\tau)}\,{d\tau}+K_d{\frac{d}{dt}}e(t)$$<br  />
-其中:<br  />
+PID 算法的经典模型可用如下公式进行表示:
+$$u(t)=K_p{e(t)}+K_i\int_0^t{e(\tau)}\,{d\tau}+K_d{\frac{d}{dt}}e(t)$$
+其中:
 </p>
 <ul class="org-ul">
-<li>\(K_p\)：比例增益，是调适参数<br  />
+<li>\(K_p\)：比例增益，是调适参数
 </li>
-<li>\(K_i\)：积分增益，也是调适参数<br  />
+<li>\(K_i\)：积分增益，也是调适参数
 </li>
-<li>\(K_d\)：微分增益，也是调适参数<br  />
+<li>\(K_d\)：微分增益，也是调适参数
 </li>
-<li>\(e\)：误差=设定值（SP）- 回授值（PV）<br  />
+<li>\(e\)：误差=设定值（SP）- 回授值（PV）
 </li>
-<li>\(t\)：目前时间<br  />
+<li>\(t\)：目前时间
 </li>
-<li>\(\tau\)：积分变数，数值从 0 到目前时间 t<br  />
+<li>\(\tau\)：积分变数，数值从 0 到目前时间 t
 </li>
 </ul>
 </div>
@@ -263,15 +288,15 @@ $$u(t)=K_p{e(t)}+K_i\int_0^t{e(\tau)}\,{d\tau}+K_d{\frac{d}{dt}}e(t)$$<br  />
 <h3 id="sec-3-2">离散化模型</h3>
 <div class="outline-text-3" id="text-3-2">
 <p>
-离散化模型有两种表示方式:<br  />
+离散化模型有两种表示方式:
 </p>
 
 <p>
-分别为位置式 (1) 和增量式 (2)<br  />
+分别为位置式 (1) 和增量式 (2)
 </p>
 
 <p>
-$$\begin{array}{ll} u(t_k)={K_p}e(t_k)+K_i \sum_{i=1}^n e(t_i)+K_d\left[e(t_k)-e(t_{k-1})\right] & (1) \\ u(t_k)=u(t_{k-1})+K_p\left[e(t_k)-e(t_{k-1}\right]+K_i e(t_k)+K_d \left[e(t_k)-2e(t_{k-1})+e(t_{k-2})\right] & (2) \end{array}$$<br  />
+$$\begin{array}{ll} u(t_k)={K_p}e(t_k)+K_i \sum_{i=1}^n e(t_i)+K_d\left[e(t_k)-e(t_{k-1})\right] & (1) \\ u(t_k)=u(t_{k-1})+K_p\left[e(t_k)-e(t_{k-1}\right]+K_i e(t_k)+K_d \left[e(t_k)-2e(t_{k-1})+e(t_{k-2})\right] & (2) \end{array}$$
 </p>
 </div>
 </div>
@@ -284,9 +309,9 @@ $$\begin{array}{ll} u(t_k)={K_p}e(t_k)+K_i \sum_{i=1}^n e(t_i)+K_d\left[e(t_k)-e
 <h3 id="sec-4-1">积分分离的 PID 控制器</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
-在一般的 PID 控制方式中，在开始或停止工作的瞬间，或者大幅度地给定量时，由于偏差较大，在积分项的作用下，将会产生一个很大的超调。<br  />
-为此，可以采用积分分离手段，即在被控制量开始跟踪时，取消积分作用，直到被控制量接近新的给定值时，才可以在 PID 算式中，引入如下的算法逻辑功能。<br  />
-$$\begin{array}{ll} u(k)=K_pe(k)+\beta K_i\sum_{i=0}^{k}e(i)+K_d[e(k)-e(k-1)] \\其中\, \quad \beta = \left\{ \begin{array}{ll}1\, \quad e(k)\le\varepsilon \\ 0\, \quad e(k)>\varepsilon \end{array} \right. \, \quad \varepsilon 为积分阈值.\end{array}$$<br  />
+在一般的 PID 控制方式中，在开始或停止工作的瞬间，或者大幅度地给定量时，由于偏差较大，在积分项的作用下，将会产生一个很大的超调。
+为此，可以采用积分分离手段，即在被控制量开始跟踪时，取消积分作用，直到被控制量接近新的给定值时，才可以在 PID 算式中，引入如下的算法逻辑功能。
+$$\begin{array}{ll} u(k)=K_pe(k)+\beta K_i\sum_{i=0}^{k}e(i)+K_d[e(k)-e(k-1)] \\其中\, \quad \beta = \left\{ \begin{array}{ll}1\, \quad e(k)\le\varepsilon \\ 0\, \quad e(k)>\varepsilon \end{array} \right. \, \quad \varepsilon 为积分阈值.\end{array}$$
 </p>
 </div>
 </div>
@@ -295,7 +320,7 @@ $$\begin{array}{ll} u(k)=K_pe(k)+\beta K_i\sum_{i=0}^{k}e(i)+K_d[e(k)-e(k-1)] \\
 <h3 id="sec-4-2">PID 控制器的 C 语言实现</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
-我用 C 语言实现了一个简单的 PID 控制器.代码如下:<br  />
+我用 C 语言实现了一个简单的 PID 控制器.代码如下:
 </p>
 
 <div class="org-src-container">
@@ -346,7 +371,7 @@ $$\begin{array}{ll} u(k)=K_pe(k)+\beta K_i\sum_{i=0}^{k}e(i)+K_d[e(k)-e(k-1)] \\
 <div id="postamble" class="status">
 <p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-04-06 Thu&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
-<p class="date">Created: 2017-05-27 Sat 23:38</p>
+<p class="date">Created: 2017-05-29 Mon 17:56</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"></p>
 </div>
