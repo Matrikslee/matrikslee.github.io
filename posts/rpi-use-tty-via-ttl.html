@@ -4,7 +4,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <title>树莓派使用 ttl 串口转 usb 连接电脑登录终端</title>
-<!-- 2017-05-29 Mon 17:56 -->
+<!-- 2017-06-02 Fri 09:58 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
@@ -140,6 +140,19 @@ for the JavaScript code in this tag.
 <body>
 <div id="content">
 <h1 class="title">树莓派使用 ttl 串口转 usb 连接电脑登录终端</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">背景</a></li>
+<li><a href="#sec-2">操作</a></li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">背景</h2>
+<div class="outline-text-2" id="text-1">
 <p>
 之前买了一块树莓派 3 的板子,准备搞个服务器玩玩.
 </p>
@@ -151,34 +164,71 @@ for the JavaScript code in this tag.
 <p>
 试了很多遍修改树莓派里面的 <code>/etc/ssh/sshd_config</code> 文件都没用之后,在网上发现了树莓派使用 usb 转串口可以连接电脑的方法.
 </p>
+</div>
+</div>
+
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">操作</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+连接终端的工具可以用 GNU 的 screen 程序,也可以用 minicom 这个程序,随意选择.
+</p>
 
 <p>
-步骤差不多如下:
+具体的操作步骤如下:
 </p>
 
 <ol class="org-ol">
-<li>之后就是查树莓派三的引脚手册,找出 TX 和 RX,用杜邦线把 usb-to-ttl 接到树莓派上.
+<li>编辑树莓派 <b>/boot</b> 目录下的 <b>config.txt</b> 文件,
+<ul class="org-ul">
+<li>追加一句 <code>enable_uart=1</code>,以开启树莓派的串口连接功能.
+</li>
+<li>追加一句 <code>dtoverlay=pi3-disable-bt</code>,禁用蓝牙串口功能,以释放串口给 tty 使用.
+</li>
+</ul>
 </li>
 
-<li>把 usb 接到电脑上,如果用的是 linux 系统<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>,接上之后系统里会多出一个设备 <code>/dev/ttyUSB0</code>.
+<li>之后就是查树莓派三的引脚手册,找出 TX 和 RX,用杜邦线把 usb-to-ttl 接到树莓派上, 如下图所示.
+
+<div class="figure">
+<p><img src="https://www.element14.com/community/servlet/JiveServlet/previewBody/73950-102-11-339300/pi3_gpio.png" alt="pi3_gpio.png" />
+</p>
+<p><span class="figure-number">Figure 1:</span> 树莓派 3E14 GPIO 引脚图</p>
+</div>
+
+<p>
+我们使用 <b>PIN#O6(GND), PIN#O8(TX), PIN#10(RX)</b> 这三个引脚<sup><a id="fnr.1" name="fnr.1" class="footref" href="#fn.1">1</a></sup>.
+</p>
 </li>
 
-<li>检查是否安装了 <a href="https://www.gnu.org/software/screen/">GNU Screen</a>, 在终端下输入 <code>screen -v</code> 会出现该软件的版本信息,如果出现的是 <code>command not found</code>, 则需要安装<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>.
+<li>把 usb 接到电脑上,如果用的是 linux 系统并且驱动没有问题<sup><a id="fnr.2" name="fnr.2" class="footref" href="#fn.2">2</a></sup>,接上之后系统里会多出一个设备 <b>/dev/ttyUSB0</b>.
+
+<p>
+windows 系统可以打开设备管理器查看串口设备是否安装驱动程序并检查驱动程序是否正常运行.
+</p>
 </li>
 
-<li>使用 <code>screen</code> 命令连接树莓派终端, 在终端下输入 <code>screen /dev/ttyUSB0 115200</code>,第二个参数是 usb-to-ttl 设备名,第三个参数是波特率,如果树莓派没有经过特殊配置,默认为 115200.
+<li>使用 <b>screen</b> 或者 <b>minicom</b> 命令连接树莓派终端.
+<ol class="org-ol">
+<li>screen: 在终端下输入 <code>screen /dev/ttyUSB0 115200</code>,第二个参数是 usb-to-ttl 设备名,第三个参数是波特率,如果树莓派没有经过特殊配置,默认为 115200.
+</li>
+<li>minicom: 使用 <code>minicom -D /dev/ttyUSB0</code>.
 </li>
 </ol>
+</li>
+</ol>
+</div>
+</div>
 <div id="footnotes">
 <h2 class="footnotes">Footnotes: </h2>
 <div id="text-footnotes">
 
 <div class="footdef"><sup><a id="fn.1" name="fn.1" class="footnum" href="#fnr.1">1</a></sup> <p class="footpara">
-其他系统没测试过,应该是要装驱动的,不过我用的 Arch,udev 自带驱动,好像会自动装载.
+注意树莓派上的 TX(PIN#8) 应该接 USB-TTL 的 RX,而树莓派上的 RX(PIN#10) 应该接 USB-TTL 的 TX.
 </p></div>
 
 <div class="footdef"><sup><a id="fn.2" name="fn.2" class="footnum" href="#fnr.2">2</a></sup> <p class="footpara">
-一般的 linux 发行版的官方仓库都有,如果没有,通过包管理器或者下载二进制文件安装.
+其他系统没测试过,应该是要装驱动的,不过我用的 Arch,udev 自带驱动,好像会自动装载.
 </p></div>
 
 
@@ -187,7 +237,7 @@ for the JavaScript code in this tag.
 <div id="postamble" class="status">
 <p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-05-01 Mon&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
-<p class="date">Created: 2017-05-29 Mon 17:56</p>
+<p class="date">Created: 2017-06-02 Fri 09:58</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"></p>
 </div>
