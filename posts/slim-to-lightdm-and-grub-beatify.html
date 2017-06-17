@@ -3,11 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<title>文章列表</title>
-<!-- 2017-06-17 Sat 16:36 -->
+<title>从 slim 到 lightdm 和 GRUB 美化</title>
+<!-- 2017-06-17 Sat 16:59 -->
 <meta  http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta  name="generator" content="Org-mode" />
 <meta  name="author" content="Matrikslee" />
+<meta  name="keywords" content="grub, lightdm, slim, display manager" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center; }
@@ -138,45 +139,129 @@ for the JavaScript code in this tag.
 </head>
 <body>
 <div id="content">
-<h1 class="title">文章列表</h1>
-<ul class="org-ul">
-<li><a href="slim-to-lightdm-and-grub-beatify.html">从 slim 到 lightdm 和 GRUB 美化</a>
+<h1 class="title">从 slim 到 lightdm 和 GRUB 美化</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">前言</a></li>
+<li><a href="#sec-2">更换显示管理器</a></li>
+<li><a href="#sec-3">美化 GRUB</a>
+<ul>
+<li><a href="#sec-3-1">使用 theme</a></li>
+<li><a href="#sec-3-2">使用 background</a></li>
+</ul>
 </li>
-<li><a href="install-ssd-on-dell-laptop.html">在 DELL 笔记本上装 SSD</a>
-</li>
-<li><a href="netctl-troubleshooting.html">记一次画蛇添足的 netctl 故障排查</a>
-</li>
-<li><a href="pid-controller.html">经典控制器-PID</a>
-</li>
-<li><a href="rpi-use-tty-via-ttl.html">树莓派使用 ttl 串口转 usb 连接电脑登录终端</a>
-</li>
-<li><a href="linux-cli-skills.html">linux 命令行</a>
-</li>
-<li><a href="times-more-than-half.html">出现次数超过一半的数字</a>
-</li>
-<li><a href="nginx-flask-uwsgi.html">nginx、flask、uwsgi 部署</a>
-</li>
-<li><a href="nasty-secure-boot.html">恶心的 Secure Boot</a>
-</li>
-<li><a href="summary-of-2016acm.html">2016 年山东省 ACM 省赛总结</a>
-</li>
-<li><a href="linux-asm-begin.html">Linux 下搭建汇编语言学习环境</a>
-</li>
-<li><a href="en-hans-monospace-issuse.html">Emacs 中英文混排时等宽字体的对齐问题</a>
-</li>
-<li><a href="ubuntu-grub-reinstall.html">ubuntu 下 grub 的重装</a>
-</li>
-<li><a href="my-dns-solution.html">关于 DNS 的一些折腾</a>
-</li>
-<li><a href="original-android-in-xiaomi-4.html">在小米 4 手机上刷原生安卓系统</a>
-</li>
-<li><a href="use-google-services-in-miui-7.html">在 MIUI-7 系统中使用 Google 全家桶</a>
-</li>
+<li><a href="#sec-4">效果图</a></li>
 </ul>
 </div>
+</div>
+
+<div id="outline-container-sec-1" class="outline-2">
+<h2 id="sec-1">前言</h2>
+<div class="outline-text-2" id="text-1">
+<p>
+使用 Archlinux 也有一段时间了，之前只是简单的美化了一下桌面环境，至于启动界面就没怎么管了。
+</p>
+
+<p>
+这几天心血来潮，就想着还是美化一下启动界面吧,于是简单的美化了一下 grub。
+再加上在依云大大的博客里面看到了这个--<a href="https://blog.lilydjwg.me/2015/11/4/from-slim-to-lightdm.187512.html">从 slim 到 lightdm</a>，发现 slim 因为开发者停止更新而 systemd 持续更新导致系统会出现某些我看不懂的 bug（我也不知道我的电脑会不会出现）。
+不过想着既然是 bug，能避免就避免吧，于是就把显示管理器换成了 lightdm，而且 lightdm 也更漂亮一些不是吗？
+</p>
+</div>
+</div>
+<div id="outline-container-sec-2" class="outline-2">
+<h2 id="sec-2">更换显示管理器</h2>
+<div class="outline-text-2" id="text-2">
+<p>
+执行下面的命令将取消 slim 自启动并删除，然后安装 lightdm，并设置自启动。
+</p>
+<div class="org-src-container">
+
+<pre class="src src-sh">sudo systemctl disable slim.service
+sudo pacman -Rs slim
+sudo pacman -S lightdm-gtk-greeter-settings
+sudo systemctl enable slim.servicce
+</pre>
+</div>
+<p>
+接下来对 lightdm 进行简单的设置：
+运行 <code>lightdm-gtk-greeter-settings-pkexec</code> 对 lightdm 进行设置。
+</p>
+
+<ul class="org-ul">
+<li>apperance： 可以修改主题，背景图片，用户头像，
+</li>
+<li>Panel： 可以设置顶部 panel 的元素和样式。
+</li>
+<li>Window Position：可以设置登录窗口的大小和位置等。
+</li>
+<li>Misc.： 我也不知道是什么设置，就没管了。
+</li>
+</ul>
+
+<p>
+改完之后启动器应该就可以变成自己喜欢的样子了。
+</p>
+</div>
+</div>
+
+<div id="outline-container-sec-3" class="outline-2">
+<h2 id="sec-3">美化 GRUB</h2>
+<div class="outline-text-2" id="text-3">
+<p>
+我的 Arch 使用 GRUB 进行引导（说实在的，我就用过 GRUB 这一种引导程序）。
+</p>
+
+<p>
+之前的需求一直都是功能够用就行了，界面一直用的默认界面，前几天才对它进行了简单的美化。
+</p>
+
+<p>
+试了两种美化方案，一种是使用 theme，不过我会做 theme，于是用的官方仓库里面的 <code>grub2-theme-arch-leap</code> ，发现它并不是很符合我的审美。
+</p>
+
+<p>
+于是就选择了第二种方案&#x2013;只使用 background。
+</p>
+</div>
+
+<div id="outline-container-sec-3-1" class="outline-3">
+<h3 id="sec-3-1">使用 theme</h3>
+<div class="outline-text-3" id="text-3-1">
+<p>
+首先你得安装一个 theme，然后找到 theme.txt 文件的绝对路径。
+修改 <code>/etc/default/grub</code> 文件，
+取消注释 <code>GRUB_THEME</code> 行，并将之前得到的 theme.txt 文件的绝对路径填入其后的双引号中，
+使用 <code>sudo grub-mkconfig -o /boot/grub/grub.cfg</code> 更新 GRUB 配置即可。
+</p>
+</div>
+</div>
+<div id="outline-container-sec-3-2" class="outline-3">
+<h3 id="sec-3-2">使用 background</h3>
+<div class="outline-text-3" id="text-3-2">
+<p>
+准备一张喜欢的图片，修改 <code>/etc/default/grub</code> 文件，
+取消注释 <code>GRUB_BACKGROUND</code> 行，并在其后的目录中填入之前准备的图片的绝对路径，
+使用 <code>sudo grub-mkconfig -o /boot/grub/grub.cfg</code> 更新 GRUB 配置即可。
+</p>
+</div>
+</div>
+</div>
+<div id="outline-container-sec-4" class="outline-2">
+<h2 id="sec-4">效果图</h2>
+<div class="outline-text-2" id="text-4">
+<p>
+<img src="https://ooo.0o0.ooo/2017/06/17/5944ef065b87e.png" alt="5944ef065b87e.png" /> <img src="https://ooo.0o0.ooo/2017/06/17/5944ef06b6d3c.png" alt="5944ef06b6d3c.png" />
+</p>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
+<p class="date">Date: <span class="timestamp-wrapper"><span class="timestamp">&lt;2017-06-17 Sat&gt;</span></span></p>
 <p class="author">Author: Matrikslee</p>
-<p class="date">Created: 2017-06-17 Sat 16:36</p>
+<p class="date">Created: 2017-06-17 Sat 16:59</p>
 <p class="creator"><a href="http://www.gnu.org/software/emacs/">Emacs</a> 25.2.1 (<a href="http://orgmode.org">Org</a> mode 8.2.10)</p>
 <p class="validation"></p>
 </div>
